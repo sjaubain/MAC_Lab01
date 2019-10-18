@@ -75,7 +75,9 @@ public class CACMIndexer implements ParserListener {
         doc.add(new Field("title", title, fieldType));
 
         // Summary, if any (body field)
-        doc.add(new TextField("summary", summary, Field.Store.YES));
+		if(summary != null) {
+            doc.add(new TextField("summary", summary, Field.Store.YES));
+        }
 
 		try {
 			this.indexWriter.addDocument(doc);

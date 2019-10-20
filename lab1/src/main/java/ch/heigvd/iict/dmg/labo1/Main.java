@@ -16,8 +16,6 @@ public class Main {
 		// 1.1. create an analyzer
 		Analyzer analyser = getAnalyzer();
 
-		// TODO student "Tuning the Lucene Score"
-//		Similarity similarity = null;//new MySimilarity();
 		Similarity similarity = new MySimilarity();
 		
 		CACMIndexer indexer = new CACMIndexer(analyser, similarity);
@@ -44,6 +42,7 @@ public class Main {
 	}
 
 	private static void searching(QueriesPerformer queriesPerformer) {
+        // source : https://lucene.apache.org/core/2_9_4/queryparsersyntax.html
 		// Example
 		queriesPerformer.query("compiler program");
 
@@ -51,10 +50,10 @@ public class Main {
         queriesPerformer.query("Information Retrieval");
 
 		// Containing both <Information> and <Retrieval>;
-        queriesPerformer.query("\"Information\" AND \"Retrieval\""); // Escaping special characters
+        queriesPerformer.query("Information AND Retrieval");
 
         // Containing at least the term <Retrieval> and, possibly <Information> but not <Database>
-        queriesPerformer.query("+\"Retrieval\" \"Information\" NOT \"Database\"");
+        queriesPerformer.query("+Retrieval Information NOT Database");
 
         // Containing a term starting with <Info>
         queriesPerformer.query("Info*");
@@ -64,6 +63,7 @@ public class Main {
 
 		// test searching for document ids (should not return them)
 		queriesPerformer.query( "254");
+
 	}
 
 	private static Analyzer getAnalyzer() {

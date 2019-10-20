@@ -257,3 +257,5 @@ Total documents found : 578
 2944: Shifting Garbage Collection Overhead to Compile Time (4.523839)
 1465: Program Translation Viewed as a General Data Processing Problem (4.5153804)
 ```
+
+If we observe the first result of both lists, we can see that a "programm" like query term appears 5 times in the document 2923 and only 3 times in the document 3189. Our custom similarity seems much based on how many time a term occurs in a document.

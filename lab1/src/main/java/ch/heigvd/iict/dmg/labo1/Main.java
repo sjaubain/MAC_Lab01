@@ -5,11 +5,9 @@ import ch.heigvd.iict.dmg.labo1.parsers.CACMParser;
 import ch.heigvd.iict.dmg.labo1.queries.QueriesPerformer;
 import ch.heigvd.iict.dmg.labo1.similarities.MySimilarity;
 import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.search.similarities.Similarity;
 
-import static org.apache.lucene.queryparser.classic.QueryParser.Operator.AND;
 
 public class Main {
 
@@ -63,6 +61,9 @@ public class Main {
 
         // Containing the term <Information> close to <Retrieval> (max distance 5)
         queriesPerformer.query( "\"Information Retrieval\"~5");
+
+		// test searching for document ids (should not return them)
+		queriesPerformer.query( "254");
 	}
 
 	private static Analyzer getAnalyzer() {
@@ -73,7 +74,7 @@ public class Main {
 		// For the next part "Using different Analyzers" modify this method
 		// and return the appropriate Analyzers asked.
 
-		return new EnglishAnalyzer(); // TODO student
+		return new StandardAnalyzer(); // TODO student
 	}
 
 }

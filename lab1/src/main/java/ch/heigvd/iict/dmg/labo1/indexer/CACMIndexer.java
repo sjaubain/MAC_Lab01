@@ -50,11 +50,14 @@ public class CACMIndexer implements ParserListener {
     public void onNewDocument(Long id, String authors, String title, String summary) {
         Document doc = new Document();
 
-        // Add Fields
+        // set custom field parameters
         FieldType fieldType = new FieldType();
-        fieldType.setIndexOptions(IndexOptions.DOCS);
+        fieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
         fieldType.setTokenized(true);
         fieldType.setStored(true);
+        fieldType.setStoreTermVectors(true);
+        fieldType.setStoreTermVectorPositions(true);
+        fieldType.setStoreTermVectorOffsets(true);
         fieldType.freeze();
 
         // Id
@@ -63,8 +66,7 @@ public class CACMIndexer implements ParserListener {
         // Authors, if any (split by ";")
         String authorsDelimiter = ";";
         if (authors != "") {
-            String[] a = authors.split(authorsDelimiter);
-            for (String author : a) {
+            for (String author : authors.split(authorsDelimiter)) {
 
                 // Create a field for each author
                 // We don't want authors to be tokenized
@@ -78,7 +80,7 @@ public class CACMIndexer implements ParserListener {
 
         // Summary, if any (body field)
         if (summary != null) {
-            doc.add(new TextField("summary", summary, Field.Store.YES));
+            doc.add(new Field("summary", summary, fieldType));
         }
 
         try {

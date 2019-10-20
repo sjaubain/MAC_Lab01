@@ -68,6 +68,8 @@ public class QueriesPerformer {
 
 	    int numTermsToDisplay = 10;
 
+        System.out.println("\nSearching for [" + q +"]");
+
         try {
             // Search only in field summary
             QueryParser queryParser = new QueryParser("summary", analyzer);
@@ -75,7 +77,7 @@ public class QueriesPerformer {
             ScoreDoc[] hits = indexSearcher.search(query, indexReader.numDocs()).scoreDocs;
 
             System.out.println("Total documents found : " + hits.length);
-            for(int i = 0; i < numTermsToDisplay; ++i) {
+            for(int i = 0; i < Math.min(numTermsToDisplay, hits.length); ++i) {
 
                 Document document = indexSearcher.doc(hits[i].doc);
                 System.out.println(document.get("id") + ": " + document.get("title") + " (" + hits[i].score + ")");
@@ -83,8 +85,6 @@ public class QueriesPerformer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println("\nSearching for [" + q +"]");
 	}
 	 
 	public void close() {

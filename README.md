@@ -41,8 +41,8 @@ data (frequency : 110)
 ```java
 public void printTopRankingTerms(String field, int numTerms) {
 
-		// This methods print the top ranking term for a field.
-		// See "Reading Index".
+        // This methods print the top ranking term for a field.
+        // See "Reading Index".
         // Use EnglishAnalyzer to remove useless words
         try {
 
@@ -52,14 +52,14 @@ public void printTopRankingTerms(String field, int numTerms) {
             byHigherDocFreqTerms = HighFreqTerms.getHighFreqTerms(indexReader, numTerms, field,
                     new HighFreqTerms.DocFreqComparator());
 
-            for(int i = 0; i < numTerms; ++i) {
+            for (int i = 0; i < numTerms; ++i) {
                 topTerms += byHigherDocFreqTerms[i].termtext.utf8ToString();
                 topTerms += " (frequency : " + byHigherDocFreqTerms[i].totalTermFreq + ")\n";
             }
-            System.out.println("Top ranking terms for field ["  + field +"] are: \n" + topTerms);
+            System.out.println("Top ranking terms for field [" + field + "] are: \n" + topTerms);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-	}
+    }
 ```

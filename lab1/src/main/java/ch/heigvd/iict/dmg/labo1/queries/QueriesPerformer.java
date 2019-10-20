@@ -66,7 +66,8 @@ public class QueriesPerformer {
 	
 	public void query(String q) {
 
-	    int numTermsToDisplay = 10;
+        System.out.println("\nSearching for [" + q +"]");
+	    int numTermsToDisplay;
 
         try {
             // Search only in field summary
@@ -74,7 +75,9 @@ public class QueriesPerformer {
             Query query = queryParser.parse(q);
             ScoreDoc[] hits = indexSearcher.search(query, indexReader.numDocs()).scoreDocs;
 
-            System.out.println("Total documents found : " + hits.length);
+            int length = hits.length;
+            numTermsToDisplay = length > 10 ? 10 : length;
+            System.out.println("Total documents found : " + length);
             for(int i = 0; i < numTermsToDisplay; ++i) {
 
                 Document document = indexSearcher.doc(hits[i].doc);
@@ -83,8 +86,6 @@ public class QueriesPerformer {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        System.out.println("\nSearching for [" + q +"]");
 	}
 	 
 	public void close() {

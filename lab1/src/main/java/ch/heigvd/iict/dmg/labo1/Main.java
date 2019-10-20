@@ -6,10 +6,8 @@ import ch.heigvd.iict.dmg.labo1.queries.QueriesPerformer;
 import ch.heigvd.iict.dmg.labo1.similarities.MySimilarity;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.search.similarities.Similarity;
 
-import static org.apache.lucene.queryparser.classic.QueryParser.Operator.AND;
 
 public class Main {
 
@@ -18,8 +16,6 @@ public class Main {
 		// 1.1. create an analyzer
 		Analyzer analyser = getAnalyzer();
 
-		// TODO student "Tuning the Lucene Score"
-//		Similarity similarity = null;//new MySimilarity();
 		Similarity similarity = new MySimilarity();
 		
 		CACMIndexer indexer = new CACMIndexer(analyser, similarity);
@@ -46,6 +42,7 @@ public class Main {
 	}
 
 	private static void searching(QueriesPerformer queriesPerformer) {
+        // source : https://lucene.apache.org/core/2_9_4/queryparsersyntax.html
 		// Example
 		queriesPerformer.query("compiler program");
 
@@ -53,16 +50,16 @@ public class Main {
         queriesPerformer.query("Information Retrieval");
 
 		// Containing both <Information> and <Retrieval>;
-        queriesPerformer.query("\"Information\" AND \"Retrieval\""); // Escaping special characters
+        queriesPerformer.query("Information AND Retrieval");
 
         // Containing at least the term <Retrieval> and, possibly <Information> but not <Database>
-        queriesPerformer.query("+\"Retrieval\" \"Information\" NOT \"Database\"");
+        queriesPerformer.query("+Retrieval Information NOT Database");
 
         // Containing a term starting with <Info>
         queriesPerformer.query("Info*");
 
         // Containing the term <Information> close to <Retrieval> (max distance 5)
-        queriesPerformer.query( "\"Information Retrieval\"~5");
+        queriesPerformer.query( "Information Retrieval~5");
 	}
 
 	private static Analyzer getAnalyzer() {

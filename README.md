@@ -103,15 +103,25 @@ Here are the results of following queries, with lucene score :
 
 Searching for [Information Retrieval]
 Total documents found : 188
+
 1457: Data Manipulation and Programming Problemsin Automatic Information Retrieval (1.7697731)
+
 891: Everyman's Information Retrieval System (1.6287744)
+
 3134: The Use of Normal Multiplication Tablesfor Information Storage and Retrieval (1.5548403)
+
 1935: Randomized Binary Search Technique (1.5292588)
+
 2307: Dynamic Document Processing (1.4392829)
+
 1699: Experimental Evaluation of InformationRetrieval Through a Teletypewriter (1.436444)
+
 1032: Theoretical Considerations in Information Retrieval Systems (1.4117906)
+
 2519: On the Problem of Communicating Complex Information (1.3600239)
+
 1681: Easy English,a Language for InformationRetrieval Through a Remote Typewriter Console (1.3113353)
+
 2990: Effective Information Retrieval Using Term Accuracy (1.2403991)
 
 **2. Publications containing both "Information" and "Retrieval"**

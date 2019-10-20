@@ -1,4 +1,5 @@
 # MAC_Lab01
+
 Jobin Simon - Caduff Max
 
 ## 1 Introduction
@@ -12,6 +13,7 @@ simplicity at the API level.
 ## 2 Familiarizing with Lucene
 
 ### 2.1 Understanding the Lucene API
+
 1) from the code we can see that the type of fields are: the path, last modified date and the content.
 
 2) the entire path is stored as a string and is searchable, but is not tokenized and the terms frequency and position is ignored.
@@ -30,9 +32,12 @@ the content is tokenized and indexed, so the entire text is not stored but only 
 
 ### 2.2 Using Luke to explore the index
 
+The results were correct.
+
 ## 3 Indexing and Searching the CACM collection
 
 ### 3.1 indexing
+
 1) a term vector associates the term with its frequency, the positions at which it is found and the start and end offsets.
 
 2) we need to add:  
@@ -50,6 +55,152 @@ two versions of the index: (notice the "V" in the flags)
 3) the index is 1.5MB before term vectors and 2.8MB after, which is logical since storing more data takes more space.
 
 ### 3.2 Using different analyzers
+
+#### whiteSpaceAnalyser: 
+
+This analyzer breaks tokens only at whitespaces.
+ 
+a. The number of indexed documents and indexed terms:
+
+Number of documents: 3203  
+Number of terms: 34827  
+
+b. The number of indexed terms in the summary field: 26821
+
+c. The top 10 frequent terms of the summary field:
+
+* of 
+* the
+* is
+* a
+* and
+* to
+* in
+* for
+* The
+* are
+
+d. The size of the index on disk: 3 MB
+
+e. indexation time: 1707ms
+
+#### EnglishAnalyzer:
+
+This analyzer stems words and removes english common words from the tokens.
+
+a. The number of indexed documents and indexed terms:
+
+Number of documents: 3203  
+Number of terms: 23010
+
+b. The number of indexed terms in the summary field: 16724
+
+c. The top 10 frequent terms of the summary field in the index:
+
+* us
+* which
+* comput
+* program
+* system
+* present
+* describ
+* paper
+* method
+* can
+
+d. The size of the index on disk: 2.4 MB
+
+e. indexation time: 1894ms
+
+#### ShingleAnalyzerWrapper 
+
+This is an analyzer wrapper, so it takes an analyser as parameter to tokenize the content, and then creates n-grams with the tokens, which means adjacent tokens in the content are grouped by n in the index.
+n must be > 1, because a shingle of size 1 is just a token, the wrapper is not needed in this case.
+
+
+#### ShingleAnalyzerWrapper (using StandardAnalyser and shingles of size 2):
+
+a. The number of indexed documents and indexed terms:
+
+Number of documents: 3203  
+Number of terms: 119846
+
+b. The number of indexed terms in the summary field: 100768
+
+c. The top 10 frequent terms of the summary field in the index:
+
+* the 
+* of 
+* a 
+* is 
+* and
+* to 
+* in 
+* for
+* are
+* of the 
+
+d. The size of the index on disk: 6.2MB
+
+e. indexation time: 3107ms
+
+#### ShingleAnalyzerWrapper (using StandardAnalyser and shingles of size 3):
+
+a. The number of indexed documents and indexed terms:
+
+Number of documents: 3203  
+Number of terms: 251565
+
+b. The number of indexed terms in the summary field: 218853
+
+c. The top 10 frequent terms of the summary field in the index:
+
+* the 
+* of 
+* a 
+* is 
+* and
+* to 
+* in 
+* for
+* are
+* of the 
+
+d. The size of the index on disk: 10.9MB
+
+e. indexation time: 9517ms
+
+#### StopAnalyzer with a custom stop list
+
+StopAnalyser separates tokens at non-letters, lowercases them and removes stopwords.
+
+a. The number of indexed documents and indexed terms:
+
+Number of documents: 3203  
+Number of terms: 24663
+
+b. The number of indexed terms in the summary field: 18342
+
+c. The top 10 frequent terms of the summary field in the index:
+
+* system
+* computer
+* paper
+* presented
+* time
+* method
+* program
+* data
+* algorithm
+* discussed
+
+d. The size of the index on disk: 2.3MB
+
+e. indexation time: 1593ms
+
+##### conclusions:
+The execution time for the whitespace-, english- and stopAnalyzer are similar, but the english- and stopAnalyzer produces better results and a smaller index by filtering useless words. The stopAnalyzer filters more common words than the englishAnalyzer, but the last applies stemming. The shingleAnalyzerWrapper is slower and produces bigger indexes, but they can be used to search for semantics, for example searching for film titles.
+
 
 ### 3.3 Reading Index
 

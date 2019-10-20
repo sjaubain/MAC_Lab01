@@ -5,8 +5,15 @@ import ch.heigvd.iict.dmg.labo1.parsers.CACMParser;
 import ch.heigvd.iict.dmg.labo1.queries.QueriesPerformer;
 import ch.heigvd.iict.dmg.labo1.similarities.MySimilarity;
 import org.apache.lucene.analysis.Analyzer;
+import org.apache.lucene.analysis.core.StopAnalyzer;
+import org.apache.lucene.analysis.core.WhitespaceAnalyzer;
+import org.apache.lucene.analysis.en.EnglishAnalyzer;
+import org.apache.lucene.analysis.shingle.ShingleAnalyzerWrapper;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.search.similarities.Similarity;
+
+import java.io.IOException;
+import java.nio.file.FileSystems;
 
 
 public class Main {
@@ -14,14 +21,21 @@ public class Main {
 	public static void main(String[] args) {
 
 		// 1.1. create an analyzer
-		Analyzer analyser = getAnalyzer();
+		Analyzer analyser = null;
+		try {
+			analyser = getAnalyzer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		Similarity similarity = new MySimilarity();
 		
 		CACMIndexer indexer = new CACMIndexer(analyser, similarity);
 		indexer.openIndex();
 		CACMParser parser = new CACMParser("documents/cacm.txt", indexer);
+		long begin = System.currentTimeMillis();
 		parser.startParsing();
+		System.out.println("indexation time: " + (System.currentTimeMillis() - begin) + "ms");
 		indexer.finalizeIndex();
 		
 		QueriesPerformer queriesPerformer = new QueriesPerformer(analyser, similarity);
@@ -37,7 +51,7 @@ public class Main {
 	}
 
 	private static void readingIndex(QueriesPerformer queriesPerformer) {
-		queriesPerformer.printTopRankingTerms("authors", 10);
+		queriesPerformer.printTopRankingTerms("summary", 10);
 		queriesPerformer.printTopRankingTerms("title", 10);
 	}
 
@@ -66,7 +80,7 @@ public class Main {
 
 	}
 
-	private static Analyzer getAnalyzer() {
+	private static Analyzer getAnalyzer() throws IOException {
 	    // TODO student... For the part "Indexing and Searching CACM collection
 		// - Indexing" use, as indicated in the instructions,
 		// the StandardAnalyzer class.
@@ -74,7 +88,7 @@ public class Main {
 		// For the next part "Using different Analyzers" modify this method
 		// and return the appropriate Analyzers asked.
 
-		return new StandardAnalyzer(); // TODO student
+		return new StopAnalyzer(FileSystems.getDefault().getPath("common_words.txt"));
 	}
 
 }
